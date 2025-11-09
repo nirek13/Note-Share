@@ -18,6 +18,8 @@ export async function GET() {
         links.push({
           id,
           targetUrl: record.targetUrl,
+          title: record.title || null,
+          university: record.university || null,
           clicks: record.clicks || 0,
           createdAt: record.createdAt,
         });

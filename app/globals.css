@@ -54,6 +54,91 @@ body {
   color: #2563eb;
 }
 
+/* Mode Selector */
+.mode-selector {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 1rem;
+}
+
+.mode-selector .btn-secondary {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  color: #495057;
+}
+
+.mode-selector .btn-secondary.active {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: white;
+}
+
+.mode-selector .btn-secondary:hover {
+  background: #e9ecef;
+  border-color: #adb5bd;
+}
+
+.mode-selector .btn-secondary.active:hover {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+}
+
+/* Batch Results */
+.batch-results textarea {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 0.9rem;
+  background: #f8f9fa;
+  resize: vertical;
+  margin-bottom: 1rem;
+}
+
+/* Stats Groups */
+.stats-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.table-section h3 {
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #2563eb;
+  color: #2563eb;
+}
+
+/* Delete Button */
+.btn-danger {
+  background: #dc3545;
+  border: 1px solid #dc3545;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-danger:hover {
+  background: #c82333;
+  border-color: #bd2130;
+}
+
+.btn-danger:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-small {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+}
+
 /* Main Content */
 main {
   min-height: calc(100vh - 200px);
