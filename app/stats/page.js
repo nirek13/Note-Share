@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import ClickTrendChart from "@/components/ClickTrendChart";
 
 function DeleteButton({ linkId, onDelete }) {
   const [deleting, setDeleting] = useState(false);
@@ -459,6 +460,16 @@ function GroupDetailedView({ university, links, onClose }) {
               </div>
             </div>
 
+            {/* Group Click Trend Chart */}
+            <div style={{ marginBottom: '2rem' }}>
+              <h3 style={{ color: '#F59E0B', marginBottom: '1rem' }}>Group Click Trends</h3>
+              <ClickTrendChart 
+                linksData={groupDetails} 
+                title="Combined Click Trends Over Time"
+                height={300}
+              />
+            </div>
+
             <div>
               <h3 style={{ color: '#22C55E', marginBottom: '1rem' }}>Combined Click History</h3>
               {allClicks.length > 0 ? (
@@ -575,6 +586,16 @@ function DetailedView({ link, onClose }) {
               <div style={{ fontSize: '0.875rem', color: '#6B7280' }}>
                 <strong>Created:</strong> {new Date(linkDetails.createdAt).toLocaleString()}
               </div>
+            </div>
+
+            {/* Click Trend Chart */}
+            <div style={{ marginBottom: '2rem' }}>
+              <h3 style={{ color: '#F59E0B', marginBottom: '1rem' }}>Click Trends</h3>
+              <ClickTrendChart 
+                clickHistory={linkDetails.clickHistory} 
+                title="Click Trends Over Time"
+                height={250}
+              />
             </div>
 
             <div>
