@@ -14,15 +14,20 @@ export async function GET() {
     const links = [];
     for (const id of ids) {
       const record = await kv.get(`link:${id}`);
-      if (record) {
+      if (record && record.targetUrl) {
+        // Only include records with valid targetUrl
         links.push({
           id,
           targetUrl: record.targetUrl,
           title: record.title || null,
           university: record.university || null,
           clicks: record.clicks || 0,
-          createdAt: record.createdAt,
+          createdAt: record.createdAt || null,
         });
+      } else if (record) {
+        // Clean up malformed records
+        await kv.del(`link:${id}`);
+        await kv.srem("links:index", id);
       }
     }
 

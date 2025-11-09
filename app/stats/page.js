@@ -76,9 +76,9 @@ function LinkTable({ links, onDelete, title }) {
                   </td>
                   <td className="url-cell">
                     <a href={link.targetUrl} target="_blank" rel="noopener noreferrer">
-                      {link.targetUrl.length > 50 
+                      {link.targetUrl && link.targetUrl.length > 50 
                         ? `${link.targetUrl.substring(0, 50)}...` 
-                        : link.targetUrl}
+                        : link.targetUrl || "N/A"}
                     </a>
                   </td>
                   <td>{link.clicks}</td>
@@ -111,10 +111,15 @@ export default function StatsPage() {
       const response = await fetch("/api/stats", { cache: "no-store" });
       if (response.ok) {
         const data = await response.json();
-        setLinks(data);
+        // Ensure data is an array
+        setLinks(Array.isArray(data) ? data : []);
+      } else {
+        console.error("Failed to fetch stats:", response.status, response.statusText);
+        setLinks([]);
       }
     } catch (error) {
       console.error("Failed to fetch stats:", error);
+      setLinks([]);
     } finally {
       setLoading(false);
     }
