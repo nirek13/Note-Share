@@ -31,7 +31,7 @@ export default function RootLayout({ children }) {
         </header>
         <main>{children}</main>
         <footer className="footer">
-          <p>© 2024 Penseum Link Shortener • Built with ❤️ for educators</p>
+          <p>Penseum Link Shortener</p>
         </footer>
       </body>
     </html>
