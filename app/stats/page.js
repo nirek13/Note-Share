@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { penseumUrl } from "@/lib/urls";
 
 async function getStats(tag) {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
@@ -53,11 +52,6 @@ export default async function StatsPage({ searchParams }) {
             <tbody>
               {links.map((link) => {
                 const shortLink = `${process.env.NEXT_PUBLIC_BASE_URL || "https://mydomain.com"}/${link.id}`;
-                const targetUrl = penseumUrl(link.id, {
-                  utm_source: link.utm_source,
-                  utm_medium: link.utm_medium,
-                  utm_campaign: link.utm_campaign,
-                });
 
                 return (
                   <tr key={link.id}>
@@ -70,27 +64,13 @@ export default async function StatsPage({ searchParams }) {
                       </a>
                     </td>
                     <td className="url-cell">
-                      <a href={targetUrl} target="_blank" rel="noopener noreferrer">
-                        {targetUrl}
+                      <a href={link.targetUrl} target="_blank" rel="noopener noreferrer">
+                        {link.targetUrl}
                       </a>
                     </td>
                     <td>{link.clicks}</td>
                     <td>
-                      {link.tags.length > 0 ? (
-                        <div className="tags-list">
-                          {link.tags.map((t) => (
-                            <Link
-                              key={t}
-                              href={`/stats?tag=${t}`}
-                              className="tag-link"
-                            >
-                              {t}
-                            </Link>
-                          ))}
-                        </div>
-                      ) : (
-                        <span className="text-muted">—</span>
-                      )}
+                      <span className="text-muted">—</span>
                     </td>
                   </tr>
                 );

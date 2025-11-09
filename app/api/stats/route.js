@@ -17,11 +17,9 @@ export async function GET() {
       if (record) {
         links.push({
           id,
-          utm_source: record.utm_source,
-          utm_medium: record.utm_medium,
-          utm_campaign: record.utm_campaign,
+          targetUrl: record.targetUrl,
           clicks: record.clicks || 0,
-          tags: record.tags || [],
+          createdAt: record.createdAt,
         });
       }
     }
