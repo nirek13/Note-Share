@@ -1,20 +1,16 @@
-"use client";
-
 import "./globals.css";
-import Navigation from "@/components/Navigation";
-import { AuthProvider } from "@/lib/auth-context";
+import ClientLayout from "./ClientLayout";
+
+export const metadata = {
+  title: "Penseum Link Shortener",
+  description: "Create beautiful short links for Penseum courses with analytics",
+};
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <AuthProvider>
-          <Navigation />
-          <main>{children}</main>
-          <footer className="footer">
-            <p>Penseum Link Shortener</p>
-          </footer>
-        </AuthProvider>
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );
