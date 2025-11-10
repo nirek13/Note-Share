@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useAuth } from "@/lib/auth-context";
 import { useRouter } from "next/navigation";
 
@@ -49,17 +50,7 @@ export default function Navigation() {
           alignItems: 'center',
           gap: '0.5rem'
         }}>
-          <span style={{
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            color: 'white',
-            width: '32px',
-            height: '32px',
-            borderRadius: '8px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontWeight: 'bold'
-          }}>P</span>
+          <Image src="/penseum-logo.svg" alt="Penseum Logo" width={32} height={32} />
           Penseum Links
         </Link>
 

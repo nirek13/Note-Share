@@ -7,51 +7,157 @@ export default function HomePage() {
   const { user, loading } = useAuth();
 
   return (
-    <div className="container">
-      <div style={{textAlign: 'center', padding: '4rem 0', maxWidth: '800px', margin: '0 auto'}}>
-        <h1 style={{fontSize: '3rem', marginBottom: '1rem', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent'}}>
-          Penseum Link Shortener
+    <div style={{
+      minHeight: 'calc(100vh - 80px)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: '#FAFAFA'
+    }}>
+      <div style={{
+        textAlign: 'center',
+        padding: '2rem',
+        maxWidth: '480px'
+      }}>
+        {/* Minimal Logo Mark */}
+        <div style={{
+          width: '4px',
+          height: '60px',
+          margin: '0 auto 3rem',
+          background: '#111',
+          borderRadius: '2px'
+        }}></div>
+
+        {/* Title */}
+        <h1 style={{
+          fontSize: '2.5rem',
+          fontWeight: '600',
+          color: '#111',
+          marginBottom: '0.75rem',
+          letterSpacing: '-0.03em',
+          lineHeight: '1.1'
+        }}>
+          Penseum Links
         </h1>
-        <p style={{fontSize: '1.25rem', color: '#6B7280', marginBottom: '3rem', lineHeight: '1.6'}}>
-          Create short links for Penseum courses, track performance, and see which creators drive the most engagement
+
+        <p style={{
+          fontSize: '1rem',
+          color: '#666',
+          marginBottom: '3rem',
+          fontWeight: '400',
+          letterSpacing: '0.02em'
+        }}>
+          Link management for creators
         </p>
 
+        {/* CTA Buttons */}
         {loading ? (
-          <div>Loading...</div>
+          <div style={{
+            width: '24px',
+            height: '24px',
+            border: '2px solid #E5E5E5',
+            borderTop: '2px solid #111',
+            borderRadius: '50%',
+            animation: 'spin 0.8s linear infinite',
+            margin: '0 auto'
+          }}></div>
         ) : user ? (
-          <div style={{display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap'}}>
-            <Link href="/dashboard" className="btn-primary" style={{fontSize: '1.125rem', padding: '1rem 2rem'}}>
-              Go to Dashboard
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.75rem',
+            maxWidth: '240px',
+            margin: '0 auto'
+          }}>
+            <Link href="/dashboard" style={{
+              padding: '0.875rem 1.5rem',
+              fontSize: '0.9375rem',
+              fontWeight: '500',
+              background: '#111',
+              color: 'white',
+              borderRadius: '8px',
+              textDecoration: 'none',
+              transition: 'all 0.2s ease',
+              letterSpacing: '0.01em'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = '#000';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = '#111';
+            }}>
+              Dashboard
             </Link>
-            <Link href="/create" className="btn-secondary" style={{fontSize: '1.125rem', padding: '1rem 2rem'}}>
-              Create Links
+            <Link href="/create" style={{
+              padding: '0.875rem 1.5rem',
+              fontSize: '0.9375rem',
+              fontWeight: '500',
+              background: 'transparent',
+              color: '#111',
+              borderRadius: '8px',
+              textDecoration: 'none',
+              border: '1px solid #E5E5E5',
+              transition: 'all 0.2s ease',
+              letterSpacing: '0.01em'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = '#111';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = '#E5E5E5';
+            }}>
+              Create
             </Link>
           </div>
         ) : (
-          <div style={{display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap'}}>
-            <Link href="/auth/register" className="btn-primary" style={{fontSize: '1.125rem', padding: '1rem 2rem'}}>
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.75rem',
+            maxWidth: '240px',
+            margin: '0 auto'
+          }}>
+            <Link href="/auth/register" style={{
+              padding: '0.875rem 1.5rem',
+              fontSize: '0.9375rem',
+              fontWeight: '500',
+              background: '#111',
+              color: 'white',
+              borderRadius: '8px',
+              textDecoration: 'none',
+              transition: 'all 0.2s ease',
+              letterSpacing: '0.01em'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = '#000';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = '#111';
+            }}>
               Get Started
             </Link>
-            <Link href="/auth/login" className="btn-secondary" style={{fontSize: '1.125rem', padding: '1rem 2rem'}}>
+            <Link href="/auth/login" style={{
+              padding: '0.875rem 1.5rem',
+              fontSize: '0.9375rem',
+              fontWeight: '500',
+              background: 'transparent',
+              color: '#111',
+              borderRadius: '8px',
+              textDecoration: 'none',
+              border: '1px solid #E5E5E5',
+              transition: 'all 0.2s ease',
+              letterSpacing: '0.01em'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = '#111';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = '#E5E5E5';
+            }}>
               Sign In
             </Link>
           </div>
         )}
-
-        <div style={{marginTop: '4rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '2rem', textAlign: 'left'}}>
-          <div style={{padding: '1.5rem', background: '#F9FAFB', borderRadius: '12px'}}>
-            <h3 style={{marginBottom: '0.5rem', color: '#111827'}}>Track Performance</h3>
-            <p style={{color: '#6B7280', fontSize: '0.875rem'}}>Monitor clicks, engagement, and identify your top-performing content creators</p>
-          </div>
-          <div style={{padding: '1.5rem', background: '#F9FAFB', borderRadius: '12px'}}>
-            <h3 style={{marginBottom: '0.5rem', color: '#111827'}}>Simple Analytics</h3>
-            <p style={{color: '#6B7280', fontSize: '0.875rem'}}>Get detailed insights into link performance with easy-to-read charts and metrics</p>
-          </div>
-          <div style={{padding: '1.5rem', background: '#F9FAFB', borderRadius: '12px'}}>
-            <h3 style={{marginBottom: '0.5rem', color: '#111827'}}>Creator Leaderboard</h3>
-            <p style={{color: '#6B7280', fontSize: '0.875rem'}}>See which creators generate the most engagement and reward top performers</p>
-          </div>
-        </div>
       </div>
     </div>
   );
