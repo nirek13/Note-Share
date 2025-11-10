@@ -1,38 +1,20 @@
-import Link from "next/link";
-import Image from "next/image";
-import "./globals.css";
+"use client";
 
-export const metadata = {
-  title: "Penseum Link Shortener",
-  description: "Create beautiful short links for Penseum courses with analytics",
-};
+import "./globals.css";
+import Navigation from "@/components/Navigation";
+import { AuthProvider } from "@/lib/auth-context";
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <header className="header">
-          <nav className="nav">
-            <Link href="/" className="nav-brand">
-              <Image
-                src="/penseum-logo.svg"
-                alt="Penseum"
-                width={32}
-                height={32}
-                className="nav-logo"
-              />
-              Penseum Links
-            </Link>
-            <div className="nav-links">
-              <Link href="/create">Create Links</Link>
-              <Link href="/stats">Analytics</Link>
-            </div>
-          </nav>
-        </header>
-        <main>{children}</main>
-        <footer className="footer">
-          <p>Penseum Link Shortener</p>
-        </footer>
+        <AuthProvider>
+          <Navigation />
+          <main>{children}</main>
+          <footer className="footer">
+            <p>Penseum Link Shortener</p>
+          </footer>
+        </AuthProvider>
       </body>
     </html>
   );

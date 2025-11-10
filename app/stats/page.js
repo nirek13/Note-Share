@@ -282,13 +282,16 @@ function DateRangeFilter({ dateRange, onDateRangeChange }) {
   );
 }
 
-function SearchAndFilter({ 
-  searchTerm, 
-  onSearchChange, 
-  selectedUniversity, 
-  onUniversityChange, 
-  universities, 
-  sortBy, 
+function SearchAndFilter({
+  searchTerm,
+  onSearchChange,
+  selectedUniversity,
+  onUniversityChange,
+  universities,
+  selectedCreator,
+  onCreatorChange,
+  creators,
+  sortBy,
   onSortChange,
   dateRange,
   onDateRangeChange
@@ -338,6 +341,22 @@ function SearchAndFilter({
           <option value="">All Universities</option>
           {universities.map(uni => (
             <option key={uni} value={uni}>{uni}</option>
+          ))}
+        </select>
+        <select
+          value={selectedCreator}
+          onChange={(e) => onCreatorChange(e.target.value)}
+          style={{
+            padding: '0.75rem 1rem',
+            border: '1px solid #D1D5DB',
+            borderRadius: '8px',
+            fontSize: '1rem',
+            minWidth: '150px'
+          }}
+        >
+          <option value="">All Creators</option>
+          {creators.map(creator => (
+            <option key={creator.id} value={creator.id}>{creator.name}</option>
           ))}
         </select>
         <select
@@ -685,6 +704,7 @@ export default function StatsPage() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedUniversity, setSelectedUniversity] = useState("");
+  const [selectedCreator, setSelectedCreator] = useState("");
   const [selectedLinks, setSelectedLinks] = useState([]);
   const [sortBy, setSortBy] = useState("clicks");
   const [dateRange, setDateRange] = useState({ preset: 'all', start: null, end: null });
@@ -745,21 +765,24 @@ export default function StatsPage() {
 
   // Filter links
   const filteredLinks = allLinks.filter(link => {
-    const matchesSearch = !searchTerm || 
+    const matchesSearch = !searchTerm ||
       (link.title && link.title.toLowerCase().includes(searchTerm.toLowerCase())) ||
       link.id.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesUniversity = !selectedUniversity || 
+
+    const matchesUniversity = !selectedUniversity ||
       (link.university || "Other") === selectedUniversity;
-    
+
+    const matchesCreator = !selectedCreator ||
+      link.createdBy === selectedCreator;
+
     // Date range filtering
     const matchesDateRange = dateRange.preset === 'all' || !dateRange.start || !link.createdAt ||
       (() => {
         const linkDate = new Date(link.createdAt);
         return linkDate >= dateRange.start && linkDate <= dateRange.end;
       })();
-    
-    return matchesSearch && matchesUniversity && matchesDateRange;
+
+    return matchesSearch && matchesUniversity && matchesCreator && matchesDateRange;
   });
 
   // Group by university
@@ -773,6 +796,15 @@ export default function StatsPage() {
   }, {});
 
   const universities = [...new Set(allLinks.map(link => link.university || "Other"))].sort();
+
+  // Extract unique creators with their names
+  const creators = [...new Set(allLinks
+    .filter(link => link.createdBy)
+    .map(link => JSON.stringify({ id: link.createdBy, name: link.creatorName || link.creatorUsername || "Unknown" }))
+  )]
+    .map(str => JSON.parse(str))
+    .sort((a, b) => a.name.localeCompare(b.name));
+
   const totalClicks = allLinks.reduce((sum, link) => sum + (link.clicks || 0), 0);
   const filteredClicks = filteredLinks.reduce((sum, link) => sum + (link.clicks || 0), 0);
 
@@ -832,6 +864,9 @@ export default function StatsPage() {
         selectedUniversity={selectedUniversity}
         onUniversityChange={setSelectedUniversity}
         universities={universities}
+        selectedCreator={selectedCreator}
+        onCreatorChange={setSelectedCreator}
+        creators={creators}
         sortBy={sortBy}
         onSortChange={setSortBy}
         dateRange={dateRange}

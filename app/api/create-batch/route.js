@@ -2,15 +2,17 @@ import { NextResponse } from "next/server";
 import { kv } from "@/lib/kv";
 import { processBatchInput } from "@/lib/validation";
 import { shortUrl, resolveBaseUrl } from "@/lib/urls";
+import { requireAuth } from "@/lib/middleware";
+import { updateUserStats } from "@/lib/auth";
 
-export async function POST(request) {
+async function handler(request) {
   try {
     const body = await request.json();
     const { input, university } = body;
 
     // Parse batch input
     const courses = processBatchInput(input);
-    
+
     const results = [];
     const baseUrl = resolveBaseUrl(request);
 
@@ -19,13 +21,14 @@ export async function POST(request) {
       // Generate a simple ID
       const id = Math.random().toString(36).substr(2, 9);
 
-      // Create the record
+      // Create the record with creator info
       const record = {
         targetUrl: course.url,
         title: course.title,
         university: university || null,
         clicks: 0,
         createdAt: new Date().toISOString(),
+        createdBy: request.user.id,
       };
 
       // Store in KV
@@ -41,6 +44,9 @@ export async function POST(request) {
       });
     }
 
+    // Update user's total links count
+    await updateUserStats(request.user.id, courses.length, 0);
+
     return NextResponse.json({ results });
   } catch (error) {
     return NextResponse.json(
@@ -49,3 +55,5 @@ export async function POST(request) {
     );
   }
 }
+
+export const POST = requireAuth(handler);
