@@ -6,6 +6,7 @@ import Link from "next/link";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -19,7 +20,7 @@ export default function LoginPage() {
       const response = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username }),
+        body: JSON.stringify({ username, password }),
       });
 
       const data = await response.json();
@@ -62,6 +63,22 @@ export default function LoginPage() {
             />
             <label htmlFor="username" className="form-label">
               Username
+            </label>
+          </div>
+
+          <div className="form-group floating-label">
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              placeholder=" "
+              className="form-input"
+              autoComplete="current-password"
+            />
+            <label htmlFor="password" className="form-label">
+              Password
             </label>
           </div>
 

@@ -6,6 +6,7 @@ import Link from "next/link";
 
 export default function RegisterPage() {
   const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
@@ -19,13 +20,18 @@ export default function RegisterPage() {
       return;
     }
 
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters long");
+      return;
+    }
+
     setLoading(true);
 
     try {
       const response = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username }),
+        body: JSON.stringify({ username, password }),
       });
 
       const data = await response.json();
@@ -73,6 +79,26 @@ export default function RegisterPage() {
             </label>
             <div className="form-helper">
               Letters, numbers, spaces, underscores, and hyphens only
+            </div>
+          </div>
+
+          <div className="form-group floating-label">
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              placeholder=" "
+              className="form-input"
+              autoComplete="new-password"
+              minLength={6}
+            />
+            <label htmlFor="password" className="form-label">
+              Password
+            </label>
+            <div className="form-helper">
+              At least 6 characters long
             </div>
           </div>
 

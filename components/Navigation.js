@@ -79,6 +79,12 @@ export default function Navigation() {
                 fontWeight: '500',
                 transition: 'color 0.2s'
               }}>Analytics</Link>
+              <Link href="/universities" style={{
+                color: '#6B7280',
+                textDecoration: 'none',
+                fontWeight: '500',
+                transition: 'color 0.2s'
+              }}>Universities</Link>
               <Link href="/leaderboard" style={{
                 color: '#6B7280',
                 textDecoration: 'none',

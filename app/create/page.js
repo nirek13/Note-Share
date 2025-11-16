@@ -11,6 +11,8 @@ export default function CreatePage() {
   const [batchResults, setBatchResults] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [duplicateUniversity, setDuplicateUniversity] = useState(null);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
   const handleSingleSubmit = async (e) => {
     e.preventDefault();
@@ -40,7 +42,7 @@ export default function CreatePage() {
     }
   };
 
-  const handleBatchSubmit = async (e) => {
+  const handleBatchSubmit = async (e, confirmDuplicate = false) => {
     e.preventDefault();
     setError("");
     setBatchResults("");
@@ -50,10 +52,22 @@ export default function CreatePage() {
       const response = await fetch("/api/create-batch", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ input: batchInput, university }),
+        body: JSON.stringify({ 
+          input: batchInput, 
+          university, 
+          confirmDuplicate 
+        }),
       });
 
       const data = await response.json();
+
+      if (response.status === 409 && data.error === "UNIVERSITY_EXISTS") {
+        // Show confirmation dialog
+        setDuplicateUniversity(data.existingUniversity);
+        setShowConfirmDialog(true);
+        setLoading(false);
+        return;
+      }
 
       if (!response.ok) {
         throw new Error(data.error || "Failed to create links");
@@ -67,11 +81,24 @@ export default function CreatePage() {
       setBatchResults(formatted);
       setBatchInput("");
       setUniversity("");
+      setShowConfirmDialog(false);
+      setDuplicateUniversity(null);
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleConfirmDuplicate = (e) => {
+    setShowConfirmDialog(false);
+    handleBatchSubmit(e, true);
+  };
+
+  const handleCancelDuplicate = () => {
+    setShowConfirmDialog(false);
+    setDuplicateUniversity(null);
+    setLoading(false);
   };
 
   const copyToClipboard = (text) => {
@@ -153,6 +180,58 @@ https://app.penseum.com/shared/shared-course/X0UXDoJbFLqgc15TFH-39w`}
       )}
 
       {error && <div className="error">{error}</div>}
+
+      {/* Duplicate University Confirmation Dialog */}
+      {showConfirmDialog && duplicateUniversity && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000
+        }}>
+          <div style={{
+            backgroundColor: 'white',
+            padding: '2rem',
+            borderRadius: '12px',
+            maxWidth: '500px',
+            width: '90%',
+            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
+          }}>
+            <h3 style={{ marginBottom: '1rem', color: '#DC2626' }}>
+              University Already Exists
+            </h3>
+            <p style={{ marginBottom: '1rem', color: '#6B7280' }}>
+              Links for <strong>"{duplicateUniversity.name}"</strong> have already been created. 
+              This university currently has <strong>{duplicateUniversity.linkCount || 0} links</strong>.
+            </p>
+            <p style={{ marginBottom: '1.5rem', color: '#6B7280' }}>
+              Do you want to proceed and add more links to this university?
+            </p>
+            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
+              <button
+                onClick={handleCancelDuplicate}
+                className="btn-secondary"
+                style={{ minWidth: '100px' }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirmDuplicate}
+                className="btn-primary"
+                style={{ minWidth: '100px' }}
+              >
+                Proceed
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {shortUrl && (
         <div className="success">

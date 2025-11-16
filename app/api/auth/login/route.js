@@ -1,9 +1,12 @@
 import { NextResponse } from "next/server";
-import { authenticateUser, createSession } from "@/lib/auth";
+import { authenticateUser, createSession, setDefaultPasswordsForLegacyUsers } from "@/lib/auth";
 
 export async function POST(request) {
   try {
-    const { username } = await request.json();
+    // Auto-set default passwords for legacy users
+    await setDefaultPasswordsForLegacyUsers();
+    
+    const { username, password } = await request.json();
 
     if (!username) {
       return NextResponse.json(
@@ -12,8 +15,15 @@ export async function POST(request) {
       );
     }
 
+    if (!password) {
+      return NextResponse.json(
+        { error: "Password is required" },
+        { status: 400 }
+      );
+    }
+
     // Authenticate user
-    const user = await authenticateUser(username);
+    const user = await authenticateUser(username, password);
 
     // Create session
     const sessionId = await createSession(user.id);

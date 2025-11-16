@@ -3,12 +3,26 @@ import { createUser, createSession } from "@/lib/auth";
 
 export async function POST(request) {
   try {
-    const { username } = await request.json();
+    const { username, password } = await request.json();
 
     // Basic validation
     if (!username) {
       return NextResponse.json(
         { error: "Username is required" },
+        { status: 400 }
+      );
+    }
+
+    if (!password) {
+      return NextResponse.json(
+        { error: "Password is required" },
+        { status: 400 }
+      );
+    }
+
+    if (password.length < 6) {
+      return NextResponse.json(
+        { error: "Password must be at least 6 characters long" },
         { status: 400 }
       );
     }
@@ -36,7 +50,7 @@ export async function POST(request) {
     }
 
     // Create user
-    const user = await createUser(username);
+    const user = await createUser(username, password);
 
     // Create session
     const sessionId = await createSession(user.id);
